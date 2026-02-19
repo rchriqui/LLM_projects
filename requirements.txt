@@ -1,0 +1,9 @@
+# Environment & API
+python-dotenv>=1.0.0
+openai>=1.0.0
+
+# UI
+gradio>=4.0.0
+
+# Jupyter / notebook
+ipython>=8.0.0
