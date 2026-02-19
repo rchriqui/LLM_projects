@@ -5,8 +5,18 @@ env/
 
 # Environment & secrets
 .env
+.env.*
+*.env
 .env.local
 .env.*.local
+secrets/
+*.key
+*.pem
+*.p12
+config.ini
+secrets.json
+api_keys.txt
+credentials.json
 
 # Python
 __pycache__/
@@ -51,3 +61,12 @@ Thumbs.db
 # Logs & temp
 *.log
 .cache/
+
+# Benchmark artifacts (Python→C++ comparison)
+_bench_python.py
+generated_*.cpp
+main_*
+
+# C++ verification
+_verify_cpp.cpp
+_verify_cpp_exe
