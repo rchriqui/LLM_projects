@@ -2,64 +2,64 @@
 
 ## 📋 Description
 
-Ce projet se concentre sur la **génération de données synthétiques** à l'aide de techniques avancées et potentiellement de modèles de langage. Les données synthétiques sont essentielles pour l'entraînement de modèles, les tests, et la préservation de la confidentialité des données réelles.
+This project focuses on **synthetic data generation** using advanced techniques and potentially language models. Synthetic data is essential for model training, testing, and preserving the confidentiality of real data.
 
-## 🎯 Objectifs
+## 🎯 Objectives
 
-- Générer des données synthétiques réalistes
-- Créer des datasets pour l'entraînement de modèles
-- Préserver la confidentialité des données originales
-- Faciliter les tests et le développement
+- Generate realistic synthetic data
+- Create datasets for model training
+- Preserve confidentiality of original data
+- Facilitate testing and development
 
-## 🔧 Technologies Utilisées
+## 🔧 Technologies Used
 
-- **Python** : Langage principal
-- **Jupyter Notebook** : Environnement de développement interactif
-- **Bibliothèques de génération de données** : (à compléter selon le contenu du notebook)
+- **Python**: Main language
+- **Jupyter Notebook**: Interactive development environment
+- **Data generation libraries**: (to be completed based on notebook content)
 
-## 📁 Structure du Projet
+## 📁 Project Structure
 
 ```
 synthetic_data_generation/
-└── synthetic_data_generator.ipynb    # Notebook principal pour la génération de données
+└── synthetic_data_generator.ipynb    # Main notebook for data generation
 ```
 
 ## 🚀 Installation
 
-1. **Installer les dépendances** (si un fichier `requirements.txt` existe) :
+1. **Install dependencies** (if a `requirements.txt` file exists):
 ```bash
 pip install -r requirements.txt
 ```
 
-2. **Lancer Jupyter Notebook** :
+2. **Launch Jupyter Notebook**:
 ```bash
 jupyter notebook synthetic_data_generator.ipynb
 ```
 
-## 💻 Utilisation
+## 💻 Usage
 
-1. Ouvrir le notebook `synthetic_data_generator.ipynb`
-2. Exécuter les cellules dans l'ordre
-3. Configurer les paramètres de génération selon vos besoins
-4. Générer et exporter les données synthétiques
+1. Open the `synthetic_data_generator.ipynb` notebook
+2. Execute cells in order
+3. Configure generation parameters according to your needs
+4. Generate and export synthetic data
 
-## 📊 Fonctionnalités
+## 📊 Features
 
-- Génération de données structurées
-- Contrôle de la distribution et des caractéristiques
-- Export dans différents formats
-- Visualisation des données générées
+- Structured data generation
+- Control over distribution and characteristics
+- Export to different formats
+- Visualization of generated data
 
 ## 📝 Notes
 
-- Ce projet est indépendant du projet `llm_code_benchmark`
-- Les données générées peuvent être utilisées pour divers cas d'usage
-- Assurez-vous de valider la qualité des données synthétiques avant utilisation
+- This project is independent from the `llm_code_benchmark` project
+- Generated data can be used for various use cases
+- Make sure to validate the quality of synthetic data before use
 
 ## 🤝 Contribution
 
-Ce projet fait partie d'une série d'expérimentations sur la génération de données et l'utilisation des LLMs.
+This project is part of a series of experiments on data generation and LLM usage.
 
-## 📄 Licence
+## 📄 License
 
-Voir le fichier LICENSE à la racine du projet.
+See the LICENSE file at the root of the project.
