@@ -73,3 +73,6 @@ main_*
 # C++ verification
 _verify_cpp.cpp
 _verify_cpp_exe
+
+
+*.png
