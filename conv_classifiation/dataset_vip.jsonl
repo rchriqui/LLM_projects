@@ -1,0 +1,100 @@
+{"id":"ex_001","conversation":["Hi we're thinking about coming back in March."],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_002","conversation":["Our host usually books us a suite when we visit."],"signals":[{"category":"value","value":"suite_preference"},{"category":"value","value":"vip_expectation"}]}
+{"id":"ex_003","conversation":["We normally stay at Wynn when we're in Vegas."],"signals":[{"category":"competitive","value":"competitor_wynn"}]}
+{"id":"ex_004","conversation":["We're planning a birthday trip for my wife."],"signals":[{"category":"intent","value":"trip_planning"},{"category":"life_event","value":"birthday"}]}
+{"id":"ex_005","conversation":["We had an amazing experience last time."],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_006","conversation":["Honestly our last stay wasn't great."],"signals":[{"category":"sentiment","value":"negative_experience"}]}
+{"id":"ex_007","conversation":["We're thinking about bringing 8 friends this time."],"signals":[{"category":"value","value":"large_group"}]}
+{"id":"ex_008","conversation":["Budget isn't really an issue for this trip."],"signals":[{"category":"value","value":"high_budget"}]}
+{"id":"ex_009","conversation":["We're celebrating our anniversary next month."],"signals":[{"category":"life_event","value":"anniversary"}]}
+{"id":"ex_010","conversation":["Bellagio offered us a nice upgrade."],"signals":[{"category":"competitive","value":"competitor_offer"},{"category":"competitive","value":"competitor_bellagio"}]}
+{"id":"ex_011","conversation":["Thinking of coming out for a big weekend."],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_012","conversation":["We usually book penthouse suites."],"signals":[{"category":"value","value":"suite_preference"},{"category":"value","value":"vip_expectation"}]}
+{"id":"ex_013","conversation":["Cosmo has been taking good care of us lately."],"signals":[{"category":"competitive","value":"competitor_cosmo"}]}
+{"id":"ex_014","conversation":["It's actually for my wife's birthday."],"signals":[{"category":"life_event","value":"birthday"}]}
+{"id":"ex_015","conversation":["We loved the service last time."],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_016","conversation":["The room last visit was disappointing."],"signals":[{"category":"sentiment","value":"negative_experience"}]}
+{"id":"ex_017","conversation":["We're coming with a group of friends."],"signals":[{"category":"value","value":"large_group"}]}
+{"id":"ex_018","conversation":["Money isn't really a concern if the experience is good."],"signals":[{"category":"value","value":"high_budget"}]}
+{"id":"ex_019","conversation":["We're celebrating a promotion."],"signals":[{"category":"life_event","value":"promotion"}]}
+{"id":"ex_020","conversation":["Wynn offered us a complimentary suite."],"signals":[{"category":"competitive","value":"competitor_offer"},{"category":"competitive","value":"competitor_wynn"}]}
+{"id":"ex_021","conversation":["Thinking about visiting again this summer."],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_022","conversation":["Our host usually arranges suites for us."],"signals":[{"category":"value","value":"suite_preference"},{"category":"value","value":"vip_expectation"}]}
+{"id":"ex_023","conversation":["We often stay at the Cosmopolitan."],"signals":[{"category":"competitive","value":"competitor_cosmo"}]}
+{"id":"ex_024","conversation":["It's our honeymoon trip."],"signals":[{"category":"life_event","value":"honeymoon"}]}
+{"id":"ex_025","conversation":["Last stay was incredible."],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_026","conversation":["We weren't happy with the service last visit."],"signals":[{"category":"sentiment","value":"negative_experience"}]}
+{"id":"ex_027","conversation":["We might bring a big group this time."],"signals":[{"category":"value","value":"large_group"}]}
+{"id":"ex_028","conversation":["We tend to go big when we visit."],"signals":[{"category":"value","value":"high_budget"}]}
+{"id":"ex_029","conversation":["We're planning a big celebration."],"signals":[{"category":"life_event","value":"celebration"}]}
+{"id":"ex_030","conversation":["Bellagio has been offering us great perks."],"signals":[{"category":"competitive","value":"competitor_offer"},{"category":"competitive","value":"competitor_bellagio"}]}
+{"id":"ex_031","conversation":["Hi we're thinking about coming back soon."],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_032","conversation":["We usually get comped suites."],"signals":[{"category":"value","value":"suite_preference"},{"category":"value","value":"vip_expectation"}]}
+{"id":"ex_033","conversation":["We normally stay at Wynn."],"signals":[{"category":"competitive","value":"competitor_wynn"}]}
+{"id":"ex_034","conversation":["We're celebrating my wife's birthday."],"signals":[{"category":"life_event","value":"birthday"}]}
+{"id":"ex_035","conversation":["We had a fantastic stay last time."],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_036","conversation":["Last visit didn't meet expectations."],"signals":[{"category":"sentiment","value":"negative_experience"}]}
+{"id":"ex_037","conversation":["We're bringing a group of colleagues."],"signals":[{"category":"value","value":"large_group"}]}
+{"id":"ex_038","conversation":["We usually spend a lot when we're in Vegas."],"signals":[{"category":"value","value":"high_budget"}]}
+{"id":"ex_039","conversation":["We're celebrating an anniversary."],"signals":[{"category":"life_event","value":"anniversary"}]}
+{"id":"ex_040","conversation":["Cosmo offered us an upgrade."],"signals":[{"category":"competitive","value":"competitor_offer"},{"category":"competitive","value":"competitor_cosmo"}]}
+{"id":"ex_041","conversation":["What time is check-out?"],"signals":[]}
+{"id":"ex_042","conversation":["Is the pool heated?"],"signals":[]}
+{"id":"ex_043","conversation":["Do you have parking?"],"signals":[]}
+{"id":"ex_044","conversation":["Where is the spa located?"],"signals":[]}
+{"id":"ex_045","conversation":["Do rooms include WiFi?"],"signals":[]}
+{"id":"ex_046","conversation":["Is breakfast available?"],"signals":[]}
+{"id":"ex_047","conversation":["Do you offer airport transfers?"],"signals":[]}
+{"id":"ex_048","conversation":["Is the gym open late?"],"signals":[]}
+{"id":"ex_049","conversation":["Where is the lobby?"],"signals":[]}
+{"id":"ex_050","conversation":["Is valet parking available?"],"signals":[]}
+{"id":"ex_051","conversation":["Thinking about visiting next month","It's for my wife's birthday"],"signals":[{"category":"intent","value":"trip_planning"},{"category":"life_event","value":"birthday"}]}
+{"id":"ex_052","conversation":["We loved our last stay","Thinking of coming back"],"signals":[{"category":"sentiment","value":"positive_experience"},{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_053","conversation":["We usually stay at Wynn","But we're considering you this time"],"signals":[{"category":"competitive","value":"competitor_wynn"},{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_054","conversation":["We're planning our honeymoon","Looking for a suite"],"signals":[{"category":"life_event","value":"honeymoon"},{"category":"value","value":"suite_preference"},{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_055","conversation":["Our host normally books suites","We're thinking about coming next month"],"signals":[{"category":"value","value":"suite_preference"},{"category":"value","value":"vip_expectation"},{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_056","conversation":["We're bringing a group of friends","It's for a birthday celebration"],"signals":[{"category":"value","value":"large_group"},{"category":"life_event","value":"birthday"}]}
+{"id":"ex_057","conversation":["Bellagio offered us an upgrade","We're deciding where to stay"],"signals":[{"category":"competitive","value":"competitor_offer"},{"category":"competitive","value":"competitor_bellagio"},{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_058","conversation":["We had an incredible stay last time","Thinking of coming again"],"signals":[{"category":"sentiment","value":"positive_experience"},{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_059","conversation":["It's our anniversary","We usually stay in suites"],"signals":[{"category":"life_event","value":"anniversary"},{"category":"value","value":"suite_preference"}]}
+{"id":"ex_060","conversation":["We're planning a big celebration","Probably bringing friends"],"signals":[{"category":"life_event","value":"celebration"},{"category":"value","value":"large_group"}]}
+{"id":"ex_061","conversation":["Thinking of visiting in May"],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_062","conversation":["We normally stay in suites"],"signals":[{"category":"value","value":"suite_preference"}]}
+{"id":"ex_063","conversation":["We loved our last stay"],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_064","conversation":["We're celebrating our honeymoon"],"signals":[{"category":"life_event","value":"honeymoon"}]}
+{"id":"ex_065","conversation":["Cosmo usually gives us upgrades"],"signals":[{"category":"competitive","value":"competitor_cosmo"}]}
+{"id":"ex_066","conversation":["We tend to spend big when we visit"],"signals":[{"category":"value","value":"high_budget"}]}
+{"id":"ex_067","conversation":["We're planning another trip soon"],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_068","conversation":["Last stay was disappointing"],"signals":[{"category":"sentiment","value":"negative_experience"}]}
+{"id":"ex_069","conversation":["We're celebrating a promotion"],"signals":[{"category":"life_event","value":"promotion"}]}
+{"id":"ex_070","conversation":["Wynn has been offering us perks"],"signals":[{"category":"competitive","value":"competitor_wynn"}]}
+{"id":"ex_071","conversation":["Thinking about another Vegas trip"],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_072","conversation":["We usually get suites"],"signals":[{"category":"value","value":"suite_preference"}]}
+{"id":"ex_073","conversation":["We loved the service"],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_074","conversation":["It's for a birthday"],"signals":[{"category":"life_event","value":"birthday"}]}
+{"id":"ex_075","conversation":["Bellagio treats us very well"],"signals":[{"category":"competitive","value":"competitor_bellagio"}]}
+{"id":"ex_076","conversation":["Thinking about visiting again"],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_077","conversation":["We normally book suites"],"signals":[{"category":"value","value":"suite_preference"}]}
+{"id":"ex_078","conversation":["Our last stay was amazing"],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_079","conversation":["We're celebrating an anniversary"],"signals":[{"category":"life_event","value":"anniversary"}]}
+{"id":"ex_080","conversation":["Cosmo offered us perks"],"signals":[{"category":"competitive","value":"competitor_offer"},{"category":"competitive","value":"competitor_cosmo"}]}
+{"id":"ex_081","conversation":["Do you have late checkout?"],"signals":[]}
+{"id":"ex_082","conversation":["Is the spa open tonight?"],"signals":[]}
+{"id":"ex_083","conversation":["Where is the pool?"],"signals":[]}
+{"id":"ex_084","conversation":["Is breakfast included?"],"signals":[]}
+{"id":"ex_085","conversation":["Is there a gym?"],"signals":[]}
+{"id":"ex_086","conversation":["Thinking about coming for our anniversary"],"signals":[{"category":"intent","value":"trip_planning"},{"category":"life_event","value":"anniversary"}]}
+{"id":"ex_087","conversation":["We loved the suites last time"],"signals":[{"category":"sentiment","value":"positive_experience"},{"category":"value","value":"suite_preference"}]}
+{"id":"ex_088","conversation":["Wynn offered us a better package"],"signals":[{"category":"competitive","value":"competitor_offer"},{"category":"competitive","value":"competitor_wynn"}]}
+{"id":"ex_089","conversation":["Planning a birthday weekend"],"signals":[{"category":"intent","value":"trip_planning"},{"category":"life_event","value":"birthday"}]}
+{"id":"ex_090","conversation":["We usually travel with friends"],"signals":[{"category":"value","value":"large_group"}]}
+{"id":"ex_091","conversation":["Thinking about visiting again soon"],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_092","conversation":["We loved the service last time"],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_093","conversation":["We're celebrating a promotion trip"],"signals":[{"category":"life_event","value":"promotion"}]}
+{"id":"ex_094","conversation":["Cosmo usually upgrades us"],"signals":[{"category":"competitive","value":"competitor_cosmo"}]}
+{"id":"ex_095","conversation":["Budget isn't really a concern"],"signals":[{"category":"value","value":"high_budget"}]}
+{"id":"ex_096","conversation":["Thinking about another trip"],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_097","conversation":["Our host usually books suites"],"signals":[{"category":"value","value":"suite_preference"},{"category":"value","value":"vip_expectation"}]}
+{"id":"ex_098","conversation":["We had a great experience"],"signals":[{"category":"sentiment","value":"positive_experience"}]}
+{"id":"ex_099","conversation":["It's our honeymoon trip"],"signals":[{"category":"life_event","value":"honeymoon"}]}
+{"id":"ex_100","conversation":["Bellagio offered us an upgrade"],"signals":[{"category":"competitive","value":"competitor_offer"},{"category":"competitive","value":"competitor_bellagio"}]}

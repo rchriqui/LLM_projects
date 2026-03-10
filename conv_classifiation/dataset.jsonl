@@ -1,0 +1,5 @@
+{"id":"ex_001","conversation":["Hi we're thinking about coming back in March."],"signals":[{"category":"intent","value":"trip_planning"}]}
+{"id":"ex_002","conversation":["Our host usually books us a suite when we visit."],"signals":[{"category":"value","value":"suite_preference"},{"category":"value","value":"vip_expectation"}]}
+{"id":"ex_003","conversation":["We normally stay at Wynn when we're in Vegas."],"signals":[{"category":"competitive","value":"competitor_wynn"}]}
+{"id":"ex_004","conversation":["We're planning a birthday trip for my wife."],"signals":[{"category":"intent","value":"trip_planning"},{"category":"life_event","value":"birthday"}]}
+{"id":"ex_005","conversation":["What time is check-out?"],"signals":[]}

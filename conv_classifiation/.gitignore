@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Local configuration / secrets
+.env
+.env.*
+
+# Generated data & results
+llm_judge_results.json
+
+# Gradio / temp
+gradio_cached_examples/
+*.log
+
