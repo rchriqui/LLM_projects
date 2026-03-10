@@ -1,22 +1,28 @@
 # Signal Extraction Benchmark
 
-## Restriction
+Structured signal extraction from VIP casino guest conversations, evaluated across multiple frontier LLMs.
+
+---
 
 ## Dataset
 
-Since no labeled dataset was provided for the task, a synthetic dataset was created to simulate realistic VIP casino guest conversations and evaluate the signal extraction system.
+Since no labeled dataset was provided for the task, a synthetic dataset was created to simulate realistic VIP casino guest conversations.
 
 The goal of the dataset is to reproduce the types of conversational signals that a casino host or concierge system might encounter when interacting with high-value guests.
 
-These signals include:
+These signals span five categories:
 
-- Intent (e.g., planning a trip or booking a room)
-- Value indicators (e.g., preference for suites, high budget, group travel)
-- Sentiment about past experiences
-- Life events that may trigger special treatment (birthday, anniversary, promotion)
-- Competitive signals mentioning other casinos
+| Category | Values |
+|---|---|
+| `intent` | `trip_planning`, `room_booking`, `dining_booking` |
+| `value` | `suite_preference`, `high_budget`, `large_group`, `vip_expectation` |
+| `sentiment` | `positive_experience`, `negative_experience` |
+| `life_event` | `birthday`, `anniversary`, `honeymoon`, `promotion`, `celebration` |
+| `competitive` | `competitor_wynn`, `competitor_cosmo`, `competitor_bellagio`, `competitor_offer` |
 
-The dataset therefore represents a **multi-label structured information extraction problem** and was generated using the frontier model **GPT-5.3**.
+This is a **multi-label structured information extraction problem**: a single conversation can contain several signals across multiple categories. The dataset was generated using a frontier model and reviewed for consistency.
+
+> All data is fully synthetic. No real guest or personally identifiable information was used.
 
 ---
 
@@ -24,28 +30,33 @@ The dataset therefore represents a **multi-label structured information extracti
 
 Model benchmarking was performed through **OpenRouter**, which provides a unified API for accessing multiple LLM providers.
 
-This allowed evaluating several frontier and open-source models using the same inference pipeline, ensuring consistent prompts, evaluation logic, and metrics across models.
+This allowed evaluating several frontier and open-source models using the same inference pipeline, ensuring consistent prompts, evaluation logic, and metrics across all models.
+
+---
 
 ## Model Selection
 
-![Models benchmarks](models_benchmarks.png)
-
-The goal of the model selection process was to identify models that offer **the best trade-off between cost and intelligence**, while also considering latency.
+The goal of the model selection process was to identify models that offer **the best trade-off between cost and performance**, while also considering latency.
 
 Based on benchmark performance and pricing constraints, the following models were evaluated:
 
-- google/gemini-3.1-flash-lite-preview
-- xiaomi/mimo-v2-flash
-- deepseek/deepseek-v3.2
-- x-ai/grok-4.1-fast
+| Model | Provider |
+|---|---|
+| `google/gemini-3.1-flash-lite-preview` | Google |
+| `xiaomi/mimo-v2-flash` | Xiaomi |
+| `deepseek/deepseek-v3.2` | DeepSeek |
+| `x-ai/grok-4.1-fast` | xAI |
+| `openai/gpt-5-nano` | OpenAI |
+
+![Models benchmark](models_benchmarks.png)
 
 ### Evaluation Metrics
 
-The models were evaluated using the following metrics:
+Each model was evaluated using standard information retrieval metrics computed at the signal level (micro-averaged):
 
-- **Precision**
-- **Recall**
-- **F1 Score**
+- **Precision** — fraction of predicted signals that are correct
+- **Recall** — fraction of ground-truth signals that were found
+- **F1 Score** — harmonic mean of precision and recall
 
 ---
 
@@ -53,6 +64,70 @@ The models were evaluated using the following metrics:
 
 ![Results](results.png)
 
-The **Gemini-3.1-flash-lite-preview model achieved the best performance** on the evaluation dataset.
+| Rank | Model | F1 | Precision | Recall |
+|---|---|---|---|---|
+| 1 | `x-ai/grok-4.1-fast` | 0.923 | 0.857 | 1.000 |
+| 2 | `google/gemini-3.1-flash-lite-preview` | 0.909 | 1.000 | 0.833 |
+| 3 | `xiaomi/mimo-v2-flash` | 0.833 | 0.833 | 0.833 |
+| 4 | `deepseek/deepseek-v3.2` | 0.833 | 0.833 | 0.833 |
+| 5 | `openai/gpt-5-nano` | 0.769 | 0.714 | 0.833 |
 
-A possible next step would be to integrate the model into an **agentic workflow**, allowing it to extract signals in real time from guest conversations and trigger downstream actions.
+**`google/gemini-3.1-flash-lite-preview` was selected for the production prototype** given its top precision (1.00), strong F1, and best cost-to-performance ratio among the evaluated models.
+
+A natural next step would be to integrate this model into an **agentic workflow**, allowing it to extract signals in real time from guest conversations and trigger downstream actions (e.g., alert the host, personalize the offer).
+
+---
+
+## Prototype App
+
+A Gradio app (`app.py`) was built to demo the signal extraction pipeline interactively.
+
+![App](app.png)
+
+**Features:**
+- Paste any guest conversation (one turn per line)
+- Click **"✨ Extract signals"** to call `google/gemini-3.1-flash-lite-preview` via OpenRouter
+- Returns normalized signals with a **per-signal confidence score** provided by the LLM
+- Shows average confidence across detected signals
+- Displays the raw model JSON response for transparency
+
+### How to run
+
+1. Install dependencies:
+
+```bash
+pip install openai gradio python-dotenv
+```
+
+2. Create a `.env` file at the repo root with your OpenRouter API key:
+
+```
+OPENROUTER_API_KEY=sk-or-...
+```
+
+3. Launch the app:
+
+```bash
+cd conv_classifiation
+python app.py
+```
+
+4. Open `http://127.0.0.1:7860` in your browser.
+
+### Example output
+
+Input conversation:
+```
+We're planning a birthday trip for my wife.
+Our host usually books us a suite when we visit.
+```
+
+Extracted signals:
+```json
+[
+  { "category": "intent",     "value": "trip_planning",   "confidence": 0.97 },
+  { "category": "life_event", "value": "birthday",        "confidence": 0.95 },
+  { "category": "value",      "value": "suite_preference","confidence": 0.93 },
+  { "category": "value",      "value": "vip_expectation", "confidence": 0.88 }
+]
+```
