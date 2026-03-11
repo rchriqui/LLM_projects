@@ -64,13 +64,6 @@ Each model was evaluated using standard information retrieval metrics computed a
 
 ![Results](results.png)
 
-| Rank | Model | F1 | Precision | Recall |
-|---|---|---|---|---|
-| 1 | `x-ai/grok-4.1-fast` | 0.923 | 0.857 | 1.000 |
-| 2 | `google/gemini-3.1-flash-lite-preview` | 0.909 | 1.000 | 0.833 |
-| 3 | `xiaomi/mimo-v2-flash` | 0.833 | 0.833 | 0.833 |
-| 4 | `deepseek/deepseek-v3.2` | 0.833 | 0.833 | 0.833 |
-| 5 | `openai/gpt-5-nano` | 0.769 | 0.714 | 0.833 |
 
 **`google/gemini-3.1-flash-lite-preview` was selected for the production prototype** given its top precision (1.00), strong F1, and best cost-to-performance ratio among the evaluated models.
 
