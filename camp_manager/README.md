@@ -1,5 +1,32 @@
 # Camp Registration Assistant — Design Notes
 
+## Getting started
+
+1. Copy `.env.example` to `.env` and add your `OPENAI_API_KEY` (or just create a `.env` with `OPENAI_API_KEY=sk-...`)
+2. Install dependencies with [uv](https://github.com/astral-sh/uv):
+
+```bash
+uv sync
+```
+
+3. Run the assistant:
+
+```bash
+uv run python agent.py
+```
+
+This opens a Gradio chat interface at `http://localhost:7860`. A dropdown in the UI lets you load pre-built test scenarios (happy path, age restriction, schedule conflict, etc.) without typing them out manually.
+
+To run the evaluation suite instead:
+
+```bash
+uv run python eval_app.py
+```
+
+---
+
+![Chat App](image/chat_app.png)
+
 A few notes on the choices I made and why.
 
 ---
