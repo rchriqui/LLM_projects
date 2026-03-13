@@ -1,102 +1,79 @@
-# Implementation Notes
+# Camp Registration Assistant — Design Notes
 
-This document explains the key design decisions behind the Summer Camp Registration Assistant, why certain tools and patterns were chosen over alternatives, and how each piece fits together.
-
----
-
-## Why OpenAI Agents SDK
-
-In my day-to-day work, I currently build agentic workflows primarily using **Google's Agent Development Kit (ADK)**. I have also worked with **LangGraph** in the past for orchestrating agent workflows.
-
-For this assignment, I intentionally chose the **OpenAI Agents SDK** because it was the most straightforward tool for the problem. The task requires a single conversational agent with tool usage and guardrails, and the SDK provides these capabilities with minimal setup and very little framework overhead.
-
-Using LangGraph would have required defining an explicit state graph (nodes, edges, and state schemas). While this approach is very powerful for complex multi-agent systems and workflow-style orchestration, it introduces additional complexity that was unnecessary for this relatively simple conversational agent.
-
-The goal for this implementation was therefore **not to showcase a complex framework**, but to select the tool that best fits the problem while keeping the implementation clear, maintainable, and easy to reason about.
+A few notes on the choices I made and why.
 
 ---
 
-## Tool Design (`tool_schemas.py`)
+## Why the OpenAI Agents SDK
 
-The six tools map directly to the six operations in the README. Each is a plain Python function — the SDK wraps them with `function_tool()`, which generates the JSON schema the model uses to call them.
+Day-to-day I work with **Google's ADK**, and I've used **LangGraph** before for multi-agent orchestration. I didn't use either here.
 
-### Read tools
+This task is a single conversational agent with tools and guardrails. The OpenAI Agents SDK handles that with almost no boilerplate. LangGraph would have needed an explicit state graph — nodes, edges, state schemas — which is great when you have branching workflows, but overkill here. I picked the tool that fit the problem rather than the one that looked most impressive.
 
-`get_camps`, `get_kids`, and `get_registrations` accept optional filter parameters so the model can narrow results in a single call rather than fetching everything and reasoning over it.
+---
 
-`get_registrations` is enriched to include `kid_name` and `camp_name` alongside the raw IDs. Without this, the model receives opaque IDs (`kid-1`, `camp-3`) and is forced to make additional lookup calls or, worse, hallucinate names.
+## Tool design (`tool_schemas.py`)
 
-### Write tools — data integrity
+Six tools, one per operation.
 
-The write tools (`register_kid`, `cancel_registration`, `update_registration_status`) perform all validation in Python, not in the LLM:
+**Read tools** (`get_camps`, `get_kids`, `get_registrations`) all accept optional filters so the model can narrow results in a single call. `get_registrations` also returns `kid_name` and `camp_name` alongside the raw IDs — without that, the model gets back `kid-1` and `camp-3` and either makes extra lookups or starts hallucinating names.
 
-- **Age range** — a child cannot be registered for a camp outside their `min_age`/`max_age` range
-- **Camp status** — cancelled camps reject new registrations immediately
-- **Duplicate check** — re-registering a child already enrolled (with a non-cancelled status) is rejected
-- **Schedule conflict** — both date range overlap AND time slot overlap must hold before a conflict is raised; a child in a morning camp and an afternoon camp on the same week is fine
-- **Capacity / waitlist** — if `enrolled >= capacity`, the child is automatically waitlisted rather than rejected outright
-- **Enrollment consistency** — `cancel_registration` and `update_registration_status` both decrement the `enrolled` counter and automatically promote the earliest waitlisted child when a spot opens
+**Write tools** do all validation in Python, not in the LLM:
 
-Keeping this logic in Python (rather than relying on the LLM to reason about it) makes it deterministic, testable, and immune to model hallucination.
+- age range check against `min_age` / `max_age`
+- camp status (no registrations to cancelled camps)
+- duplicate detection (same child, same camp, non-cancelled status)
+- schedule conflicts — date overlap *and* time slot overlap both have to hold; morning and afternoon camps on the same week are fine
+- capacity / waitlist — full camp means automatic waitlist, not a hard rejection
+- enrollment counter — cancellations decrement `enrolled` and auto-promote the earliest waitlisted child
 
-### Type hints matter
+Keeping this in Python makes it deterministic and testable. The LLM doesn't need to reason about it and can't get it wrong.
 
-Optional parameters use `str | None = None` (not `str = None`). The SDK generates JSON schemas directly from function signatures; the incorrect form produces a non-nullable string schema, which confuses the model about whether the parameter is required.
+One annoying detail: optional parameters need `str | None = None`, not `str = None`. The SDK generates JSON schemas directly from signatures, and the second form produces a non-nullable field, which confuses the model about whether the parameter is required.
 
 ---
 
 ## Guardrails (`agent.py`)
 
-Two independent guardrail layers protect the agent:
+**Input guardrail** — a `gpt-4o-mini` classifier runs before the main agent on every message. It catches offensive content and prompt injection, then triggers a tripwire that returns a polite refusal. I kept it permissive on purpose — complaints, cancellations, mentions of a child's age should all pass through fine.
 
-### 1. Input guardrail — inappropriate content
+`run_in_parallel=False` because the guardrail has to finish before the main agent starts, not race it.
 
-An `@input_guardrail` runs a dedicated `gpt-4o-mini` classifier *before* the main agent sees the message. It checks for offensive, abusive, or prompt-injection attempts and triggers a tripwire that silently blocks the message and returns a polite refusal. The guardrail is intentionally permissive for normal registration language — complaints, cancellations, mentions of a child's age — so it does not generate false positives on legitimate requests.
+**Tool input guardrail** — attached to all three write tools. Checks that `kid_id`, `camp_id`, and `registration_id` actually look like IDs (`kid-`, `camp-`, `reg-` prefixes). The most common model mistake is passing `"Emma"` instead of `"kid-1"` — this catches it early and tells the model to do the lookup first.
 
-`run_in_parallel=False` is set deliberately: the guardrail must complete before the main agent runs, not concurrently with it.
-
-### 2. Tool input guardrail — ID format validation
-
-A `@tool_input_guardrail` attached to all three write tools intercepts calls before execution. It checks that `kid_id`, `camp_id`, and `registration_id` follow the expected prefixes (`kid-`, `camp-`, `reg-`). This catches the most common model mistake — passing a human name (`"Emma"`) instead of the resolved ID (`"kid-1"`) — and returns an explicit rejection message instructing the model to call the lookup tool first.
-
-### Custom failure error function
-
-Write tools are registered with a `failure_error_function` that formats validation errors as:
+**Custom failure error function** — write tools return errors formatted as:
 
 ```
 VALIDATION_ERROR: <message>. Do NOT call any more tools. Report this error directly to the user and stop.
 ```
 
-Without this, the default SDK error message is generic and the model sometimes enters a recovery loop (trying alternative tools) that can exhaust the `max_turns` budget. The explicit instruction to stop prevents that.
+Without the explicit stop instruction, the model sometimes enters a recovery loop trying alternative tools and burns through `max_turns`. The instruction kills that.
 
 ---
 
-## Multi-turn conversation
+## Conversation state
 
-`CampAssistant` is a stateful class. Each `chat()` call appends the user message to `self._history`, runs the agent, then replaces `self._history` with `result.to_input_list()`. This preserves the full conversation — including all tool calls and their results — so the model has complete context on every turn.
+`CampAssistant` keeps `self._history`. Each turn appends the user message, runs the agent, then replaces the history with `result.to_input_list()` — which includes tool calls and their results, not just the text. The model has full context on every turn.
 
-A session-level `trace()` wraps each `Runner.run()` call. This sends the full turn (input, tool calls, tool results, output) to the OpenAI tracing dashboard, which is invaluable for debugging non-obvious agent behaviour.
+Each `Runner.run()` call is wrapped in a `trace()` session, which pushes everything to the OpenAI tracing dashboard. Useful for debugging when the agent does something unexpected and you can't tell why from the output alone.
 
 ---
 
 ## Confirmation before writes
 
-The system prompt instructs the agent to always confirm with the user before calling any write tool. This is a **conversational guarantee** implemented at the prompt level: the model gathers the necessary information (child name, camp name, details), presents a confirmation summary, and only calls `register_kid` / `cancel_registration` after the user says yes.
+The system prompt tells the agent to confirm with the user before calling any write tool. So it gathers the info, presents a summary ("Register Liam Chen for Soccer Stars, July 14–18, $200?"), and only calls `register_kid` after the user says yes.
 
-This approach was chosen over a technical interrupt mechanism (like the SDK's `RunState` approval flow) because:
-- The confirmation is contextual and informative ("Register Liam Chen for Soccer Stars, July 14–18, $200?") rather than a generic yes/no gate
-- It naturally demonstrates multi-turn conversation handling, which is an explicit requirement
-- The SDK interrupt approach requires serialising `RunState` between turns, adding significant state-management complexity to the Gradio interface
+I considered the SDK's `RunState` interrupt mechanism, but skipped it. It requires serialising state between turns, which adds real complexity to the Gradio interface. The prompt-level approach is simpler, the confirmation message is more informative, and it naturally demonstrates multi-turn handling anyway.
 
 ---
 
-## System prompt design
+## System prompt
 
-The system prompt encodes two types of constraints:
+Two things it encodes:
 
-**Hard data access rules** — the model is told it has *no* pre-existing knowledge of camps, children, or registrations and must call a tool before answering anything. This prevents hallucination: without this instruction, `gpt-4o-mini` will confidently invent camp names from its training data.
+**No pre-existing knowledge** — the model is told it has no information about camps, children, or registrations and must call a tool before answering anything. Without this, `gpt-4o-mini` will invent plausible-sounding camp names from training data.
 
-**Behavioural guidelines** — confirmation before writes, ambiguous name resolution (list all matches before proceeding), waitlist offers when a camp is full, and a "then stop" instruction after validation errors to prevent recovery loops.
+**Behavioural rules** — confirm before writes, resolve ambiguous names by listing all matches before proceeding, offer the waitlist when a camp is full, and stop after validation errors rather than trying to recover.
 
 ---
 
@@ -104,34 +81,17 @@ The system prompt encodes two types of constraints:
 
 ![Eval App](image/eval_app.png)
 
+30 test cases: camp discovery, availability, data integrity (age rules, cancelled camps, duplicates, conflicts), ambiguous names, conversational behaviour, and guardrails.
 
-### Test set
+Two evaluation methods:
 
-30 test cases covering:
-- Camp discovery (filtering by age, listing all, prices, dates, locations)
-- Availability (open spots, full camps)
-- Data integrity (age restrictions, cancelled camps, duplicate registration, schedule conflicts)
-- Ambiguous input (multiple children with the same first name)
-- Conversational behaviour (confirmation before writes, incomplete requests, unknown camps)
-- Guardrails (inappropriate / prompt-injection attempts)
+**Keyword matching** — fast and deterministic. Works well when the correct response has a clear lexical signal (e.g. "age" must appear when an age restriction fires).
 
-### Evaluation methods
+**LLM judge** — a second `gpt-4o-mini` reads the test description and response and returns `{passed, reason}`. Better for cases where the correct answer is harder to express as a keyword. Costs one extra API call per case.
 
-Two methods are available and can be run independently or together:
+When both run together, disagreements are flagged with ⚠️ — those are the interesting ones to look at manually.
 
-**Keyword matching** — checks that the agent's response contains (or does not contain) specified strings. Fast, deterministic, and easy to reason about. Sufficient for most cases where the correct response has a clear lexical signal (e.g. the word "age" must appear when an age restriction fires).
-
-**LLM judge** — a second `gpt-4o-mini` agent reads the test description, user input, and agent response and returns a structured `{passed, reason}` verdict. More robust to paraphrasing and useful for cases where the correct response is harder to pin down with keywords. Costs one extra API call per case.
-
-When both methods are run together, disagreements are flagged with ⚠️ — these are the most interesting cases to inspect manually.
-
-### Eval app
-
-`eval_app.py` is a standalone Gradio dashboard with two tabs:
-- **Run Evaluation** — executes all 30 tests live, updating the results table row by row with the selected evaluation method
-- **Last Saved Results** — loads the most recent run from `eval_results.json`; auto-loads on startup
-
-Results are saved to `eval_results.json` after each run, providing a persistent artefact that can be committed alongside the submission.
+`eval_app.py` is a Gradio dashboard with two tabs: run evaluations live (results update row by row), or load the last saved results from `eval_results.json`. Results are saved after each run.
 
 ```bash
 uv run python eval_app.py
