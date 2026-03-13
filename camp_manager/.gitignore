@@ -1,2 +1,6 @@
 .env*
 internal/
+__pycache__/
+*.pyc
+mock_db copy.json
+mock_db.backup.json
