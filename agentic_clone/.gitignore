@@ -1,0 +1,2 @@
+# Allow the linkedin PDF despite global gitignore
+!me/linkedin.pdf

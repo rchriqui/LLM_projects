@@ -1,3 +1,1 @@
-My name is Robin Chriqui. I'm a data scientist originally from Paris, and I moved to Israel in 2019.
-I’m very passionate about agentic AI, and I attend many conferences to stay up to date and follow many online courses.
-I love surfing, MMA, and cooking. My cooking is very inspired by my travels — I’ve traveled to more than 20 countries. I make an exceptional beef rendang that I learned to cook in Indonesia.
+I'm Robin, originally from Paris. I moved to Israel 5 years ago, and I've worked in different types of companies, from a big bank like Crédit Agricole to a big tech company like IBM, and for the last 4 years at Asensus Surgical. I started as a traditional data scientist, working with machine learning and data, and over time I specialized in LLMs and agentic systems. I've worked on projects such as creating an internal RAG system and building a multi-agent assistant for doctors.
